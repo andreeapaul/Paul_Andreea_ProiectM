@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Paul_Andreea_Proiect.Data;
 using Microsoft.EntityFrameworkCore;
 using Paul_Andreea_Proiect.Hubs;
+using Microsoft.AspNetCore.Identity;
 
 namespace Paul_Andreea_Proiect
 {
@@ -43,6 +44,22 @@ namespace Paul_Andreea_Proiect
                     policy.RequireRole("Manager");
                     policy.RequireClaim("Department", "Sales");
                 });
+            });
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 8;
+            });
+
+            services.Configure<IdentityOptions>(options => {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.AllowedForNewUsers = true;
             });
             services.ConfigureApplicationCookie(opts =>
             {
